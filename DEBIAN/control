@@ -1,0 +1,8 @@
+Package: tailscale-toggle
+Version: 1.0
+Section: net
+Priority: optional
+Architecture: all
+Depends: bash, libnotify-bin
+Maintainer: Fabricio <fabricio@localhost>
+Description: Interruptor visual para ativar e desativar o Tailscale no desktop XFCE.

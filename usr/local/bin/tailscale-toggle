@@ -1,0 +1,68 @@
+#!/bin/bash
+
+ICON_ON="/usr/share/icons/hicolor/22x22/apps/tailscale-on.png"
+ICON_OFF="/usr/share/icons/hicolor/22x22/apps/tailscale-off.png"
+ICON_SVG_ON="/usr/share/icons/hicolor/scalable/apps/tailscale-on.svg"
+ICON_SVG_OFF="/usr/share/icons/hicolor/scalable/apps/tailscale-off.svg"
+
+is_connected() {
+    if tailscale status --json 2>/dev/null | grep -q '"BackendState": "Running"'; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+do_toggle() {
+    if is_connected; then
+        sudo /usr/bin/tailscale down
+        notify-send -i "$ICON_OFF" "Tailscale" "VPN Desativada (OFF)"
+    else
+        sudo /usr/bin/tailscale up
+        notify-send -i "$ICON_ON" "Tailscale" "VPN Ativada (ON)"
+    fi
+}
+
+# Modo 1: Alternância direta (usado ao clicar no ícone do painel XFCE)
+if [ "$1" == "toggle" ]; then
+    do_toggle
+    exit 0
+fi
+
+# Modo 2: Janela gráfica Zenity (usado ao abrir pelo Menu Iniciar)
+if [ "$1" == "gui" ]; then
+    TS_IP=$(tailscale ip -4 2>/dev/null | head -n 1)
+    [ -z "$TS_IP" ] && TS_IP="Nenhum IP atribuído"
+
+    if is_connected; then
+        STATUS_TXT="<b>Conectado (Ativo)</b>"
+        BTN_LABEL="Desconectar VPN"
+        WIN_ICON="$ICON_SVG_ON"
+    else
+        STATUS_TXT="<b>Desconectado (Parado)</b>"
+        BTN_LABEL="Conectar VPN"
+        WIN_ICON="$ICON_SVG_OFF"
+    fi
+
+    if zenity --question \
+        --title="Gerenciador Tailscale" \
+        --window-icon="$WIN_ICON" \
+        --width=320 \
+        --ok-label="$BTN_LABEL" \
+        --cancel-label="Fechar" \
+        --text="<b>Status:</b> $STATUS_TXT\n<b>IP Tailscale:</b> $TS_IP\n\nDeseja alterar o estado da conexão?"; then
+        do_toggle
+    fi
+    exit 0
+fi
+
+# Modo 3: Saída XML padrão para o Monitor Genérico do XFCE
+if is_connected; then
+    echo "<img>$ICON_ON</img>"
+    echo "<click>/usr/local/bin/tailscale-toggle toggle</click>"
+    echo "<tool>Tailscale: Conectado (Clique para desligar)</tool>"
+else
+    echo "<img>$ICON_OFF</img>"
+    echo "<click>/usr/local/bin/tailscale-toggle toggle</click>"
+    echo "<tool>Tailscale: Desconectado (Clique para ligar)</tool>"
+fi

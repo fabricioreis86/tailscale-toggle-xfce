@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=Tailscale Liga/Desliga
+Comment=Gerenciar e alternar a conexão VPN Tailscale
+Exec=/usr/local/bin/tailscale-toggle gui
+Icon=tailscale-on
+Terminal=false
+Categories=Network;Utility;

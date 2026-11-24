@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+SUDOERS_FILE="/etc/sudoers.d/tailscale-toggle"
+
+if [ "$1" = "configure" ]; then
+    echo "%sudo ALL=(ALL) NOPASSWD: /usr/bin/tailscale" > "$SUDOERS_FILE"
+    chmod 0440 "$SUDOERS_FILE"
+    visudo -cf "$SUDOERS_FILE" >/dev/null
+    gtk-update-icon-cache -f -t /usr/share/icons/hicolor >/dev/null 2>&1 || true
+fi
+
+exit 0
