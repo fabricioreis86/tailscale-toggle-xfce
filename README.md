@@ -2,6 +2,12 @@
 
 Aplicativo leve e indicador de painel para ativar e desativar a VPN **Tailscale** com um clique no ambiente **XFCE** (testado no Linux Mint 22.3 XFCE).
 
+## Capturas de Tela
+
+| Painel (Conectado) | Painel (Desconectado) | Janela de Gerenciamento |
+| :---: | :---: | :---: |
+| ![Conectado](screenshots/painel-on.png) | ![Desconectado](screenshots/painel-off.png) | ![Janela Zenity](screenshots/janela-zenity.png) |
+
 ## Funcionalidades
 
 - **Ícone dinâmico no painel (`genmon`):** Muda de cor automaticamente entre verde (conectado) e cinza (desconectado).
@@ -9,13 +15,15 @@ Aplicativo leve e indicador de painel para ativar e desativar a VPN **Tailscale*
 - **Janela gráfica (Zenity):** Ao abrir pelo Menu Iniciar, exibe o status atual, o IPv4 do Tailscale e botões rápidos de ação.
 - **Configuração automática:** O instalador `.deb` configura `/etc/sudoers.d/tailscale-toggle` com segurança durante a instalação e remove tudo na desinstalação.
 
-## Instalação Rápida (via pacote `.deb`)
+## Instalação Rápida (em uma linha)
 
-1. Baixe o arquivo `tailscale-toggle_1.1_all.deb` na seção **[Releases](../../releases)** deste repositório.
-2. Instale pelo terminal (ou com duplo clique usando o GDebi):
-   ```bash
-   sudo apt install ./tailscale-toggle_1.1_all.deb
-   ```
+Execute o comando abaixo no terminal para baixar e instalar automaticamente a última versão:
+
+```bash
+curl -fsSL https://githubusercontent.com | bash
+```
+
+*(Alternativamente, você pode baixar o arquivo `.deb` manualmente na seção **[Releases](../../releases)** e instalar com `sudo apt install ./tailscale-toggle_1.1_all.deb`).*
 
 ## Configuração no Painel do XFCE
 
